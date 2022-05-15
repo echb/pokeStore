@@ -1,6 +1,8 @@
 <template>
-  <v-card height="280" class="card">
-    <v-img lazy-src="https://picsum.photos/id/11/10/6" max-height="150" max-width="250" :src="pokemon.image"></v-img>
+  <!-- <v-card height="280" class="card capital"> -->
+  <v-card height="280" :class="pokemon.types[0].type.name + ' card capital'">
+    <v-img lazy-src="https://picsum.photos/id/11/10/6" max-height="150" max-width="250" :src="pokemon.image" contain>
+    </v-img>
     <v-card-title>
       {{ pokemon.name }}
     </v-card-title>
