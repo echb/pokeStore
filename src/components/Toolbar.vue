@@ -3,20 +3,20 @@
     <v-avatar :color="$vuetify.breakpoint.smAndDown ? 'grey darken-1' : 'transparent'" size="32"></v-avatar>
 
     <v-tabs centered class="ml-n9" color="grey darken-1">
-      <v-tab v-if="logged" to="/home">
+      <v-tab v-if="logged.isLogged" to="/home">
         Home
       </v-tab>
-      <v-tab v-if="logged" to="/home">
+      <v-tab v-if="logged.isLogged" to="/home">
         Habilidades
       </v-tab>
-      <v-tab v-if="!logged" to="/login">
+      <v-tab v-if="logged.isLogged" to="/login" @click="handleLogOut">
+        Cerrar sesión
+      </v-tab>
+      <v-tab v-if="!logged.isLogged" to="/login">
         Iniciar sesión.
       </v-tab>
-      <v-tab v-if="!logged" to="/signup">
+      <v-tab v-if="!logged.isLogged" to="/signup">
         Registrarse
-      </v-tab>
-      <v-tab v-if="logged" to="/login" @click="handleLogOut">
-        Cerrar sesión
       </v-tab>
     </v-tabs>
 
