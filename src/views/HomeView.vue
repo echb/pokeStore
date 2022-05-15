@@ -3,8 +3,7 @@
     <v-col cols="12">
       <div>
         <div>
-          <v-select v-model="selected" :items="items" label="Solo field" solo @change="filterByType"></v-select>
-          {{ selected }}
+          <v-select v-model="selected" :items="type" label="Pokemon Type" solo @change="filterByType"></v-select>
         </div>
       </div>
       <div>
@@ -12,91 +11,38 @@
           <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </div>
         <v-row v-else>
-          <v-col cols="12" sm="9">
-            <v-row>
-              <v-col v-for="pokemon in pokemons" :key="pokemon.name" cols="6" sm="4">
-                <v-card height="280">
-                  <v-card-title>
-                    {{ pokemon.name }}
-                  </v-card-title>
-                  <div class="pokemon-button">
-                    <v-btn elevation="2" rounded x-small>Ver Pokemon</v-btn>
-                    <v-btn elevation="2" rounded x-small @click="addPokemon(pokemon.name)">Agregar Pokemon</v-btn>
-                  </div>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-
+          <Content :pokemons="pokemons"></Content>
           <v-btn class="mx-2 toggle-tab" small fab dark color="indigo" @click="hideTab">
             <v-icon dark>
               mdi-pencil
             </v-icon>
           </v-btn>
-
-          <v-col cols="12" sm="3" class="tab">
-            <v-sheet rounded="lg" min-height="268" class="floating">
-              <div class="table-events">
-                <v-btn elevation="2" icon small tile block @click="reload">
-                  <v-icon color="green">
-                    mdi-reload
-                  </v-icon>
-                </v-btn>
-                <v-btn elevation="2" icon small tile block @click="removeAll">
-                  <v-icon color="red">
-                    mdi-delete
-                  </v-icon>
-                </v-btn>
-              </div>
-              <v-simple-table height="65vh">
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">
-                        Nombre
-                      </th>
-                      <th class="text-left">
-                        Quitar Pokemon
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(pokemon, index) in choosenPokemons" :key="index">
-                      <td>{{ pokemon.name }}</td>
-                      <td><button @click="deletePokemon(index)">Remove</button></td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-sheet>
-          </v-col>
-          <div class="text-center">
-
-          </div>
+          <ChoosenTable></ChoosenTable>
         </v-row>
-
       </div>
     </v-col>
   </v-row>
-
 </template>
 
 <script>
-import '../store/pokemonsStore.js'
-import { getPokemonById, getPokemonTypes } from '../store/pokemonService.js'
+import Content from '../components/Content.vue'
+import ChoosenTable from '../components/ChoosenTable.vue'
+
+import { pokeStore } from '../store/pokemonsStore.js'
+import { getPokemonTypes } from '../store/pokemonService.js'
+
+import { bus } from '@/main'
 
 export default {
+  components: {
+    'Content': Content,
+    'ChoosenTable': ChoosenTable
+  },
   data: () => ({
     selected: '',
     isLoading: true,
-    pokemons: [],
-    items: [
-      {
-        text: 'normal',
-        value: 'normal'
-      }
-    ],
-    choosenPokemons: [],
+    pokemons: pokeStore.pokemons,
+    type: [],
     isActive: false,
   }),
   methods: {
@@ -112,24 +58,15 @@ export default {
         this.isLoading = false
       }, 1000);
     },
-    removeAll() {
-      if (this.choosenPokemons == []) return
-      this.choosenPokemons = []
-    },
     reload() {
       if (!this.selected) return
+      this.selected = ''
 
       this.loadAnimation()
-      this.pokemons = this.$storePokemon.pokemons
-    },
-    addPokemon(pokemon) {
-      this.choosenPokemons.push({ name: pokemon })
-    },
-    deletePokemon(index) {
-      this.choosenPokemons.splice(index, 1)
+      this.pokemons = pokeStore.pokemons
     },
     filterByType(pokemonType) {
-      const filteredByType = this.$storePokemon.pokemons.filter((pokemon) => {
+      const filteredByType = pokeStore.pokemons.filter((pokemon) => {
 
         const type = pokemon.types.some(el => el.type.name == pokemonType)
         if (type) {
@@ -140,33 +77,33 @@ export default {
       this.pokemons = filteredByType
     },
     async storePokemons() {
-      const localPokemonsExits = this.$storePokemon.getLocalPokemons()
+      const localPokemonsExits = pokeStore.getLocalPokemons()
       let pokemonsData
 
       if (!localPokemonsExits) {
-        // pokemonsData = await getAllPokemon()
         const worker = new Worker(new URL('../worker.js', import.meta.url));
         worker.onmessage = ({ data: { answer } }) => {
           pokemonsData = answer
-          this.$storePokemon.setPokemons(pokemonsData)
-          this.$storePokemon.setLocalPokemons(pokemonsData)
-          this.pokemons = this.$storePokemon.pokemons
+          pokeStore.setPokemons(pokemonsData)
+          pokeStore.setLocalPokemons(pokemonsData)
+          this.pokemons = pokeStore.pokemons
           this.isLoading = false
         };
         return
       }
 
-      this.$storePokemon.setPokemons(localPokemonsExits)
-      this.pokemons = this.$storePokemon.pokemons
-
-
+      pokeStore.setPokemons(localPokemonsExits)
+      this.pokemons = pokeStore.pokemons
       this.loadAnimation()
     }
   },
-  computed: {
+  created() {
+    bus.$on('reload', () => {
+      this.reload()
+    })
   },
   async mounted() {
-    this.items = await getPokemonTypes()
+    this.type = await getPokemonTypes()
     await this.storePokemons()
   }
 }
@@ -203,12 +140,16 @@ export default {
     align-items: center;
   }
 
-  .pokemon-button button:first-child {
+  .pokemon-button a:first-child {
     margin-bottom: 10px;
   }
 }
 
 @media screen and (max-width: 600px) {
+  .floating {
+    overflow-y: initial;
+  }
+
   .toggle-tab {
     display: initial;
     margin-bottom: 10px;
@@ -231,17 +172,9 @@ export default {
     transform: translateY(70vh);
   }
 
-
   .tab-active {
     transform: translateY(0);
 
-  }
-
-  .tab-hide {
-    /* transition: transform .4s ease-out;
-    position: fixed;
-    bottom: 0;
-    height: 70vh; */
   }
 
 }
