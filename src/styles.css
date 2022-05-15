@@ -1,0 +1,167 @@
+.toggle-tab {
+  display: none;
+  transition: transform .4s ease-out;
+}
+
+.floating {
+  position: sticky;
+  top: 70px;
+  overflow-y: scroll;
+  height: 70vh;
+}
+
+.table-events {
+  display: flex;
+  justify-content: space-around;
+}
+
+.table-events button {
+  min-width: 20px !important;
+}
+
+
+@media screen and (max-width: 1264px) {
+  .pokemon-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pokemon-button a:first-child {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .floating {
+    overflow-y: initial;
+  }
+
+  .toggle-tab {
+    display: initial;
+    margin-bottom: 10px;
+    position: fixed;
+    right: 0;
+    z-index: 2;
+    bottom: 0;
+  }
+
+  .toggle-tab-active {
+    z-index: 2;
+    transform: translateY(-70vh);
+  }
+
+  .tab {
+    position: fixed;
+    height: 70vh;
+    bottom: 0;
+    transition: transform .4s ease-out;
+    transform: translateY(70vh);
+  }
+
+  .tab-active {
+    transform: translateY(0);
+
+  }
+
+}
+
+.capital {
+  text-transform: capitalize;
+}
+
+.normal {
+  background-color: #A8A77A !important;
+  color: #fff !important;
+}
+
+.fire {
+  background-color: #EE8130 !important;
+  color: #fff !important;
+}
+
+.water {
+  background-color: #6390F0 !important;
+  color: #fff !important;
+}
+
+.electric {
+  background-color: #F7D02C !important;
+  color: #fff !important;
+}
+
+.grass {
+  background-color: #7AC74C !important;
+  color: #fff !important;
+}
+
+.ice {
+  background-color: #96D9D6 !important;
+  color: #fff !important;
+}
+
+.fighting {
+  background-color: #C22E28 !important;
+  color: #fff !important;
+}
+
+.poison {
+  background-color: #A33EA1 !important;
+  color: #fff !important;
+}
+
+.ground {
+  background-color: #E2BF65 !important;
+  color: #fff !important;
+}
+
+.flying {
+  background-color: #A98FF3 !important;
+  color: #fff !important;
+}
+
+.psychic {
+  background-color: #F95587 !important;
+  color: #fff !important;
+}
+
+.bug {
+  background-color: #A6B91A !important;
+  color: #fff !important;
+}
+
+.rock {
+  background-color: #B6A136 !important;
+  color: #fff !important;
+}
+
+.ghost,
+.shadow {
+  background-color: #735797 !important;
+  color: #fff !important;
+}
+
+.dragon {
+  background-color: #6F35FC !important;
+  color: #fff !important;
+}
+
+.dark {
+  background-color: #705746 !important;
+  color: #fff !important;
+}
+
+.steel {
+  background-color: #B7B7CE !important;
+  color: #fff !important;
+}
+
+.fairy {
+  background-color: #D685AD !important;
+  color: #fff !important;
+}
+
+.unknown {
+  background-color: #aaa !important;
+  color: #fff !important;
+}
