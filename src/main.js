@@ -16,6 +16,7 @@ const firebaseConfig = {
 
 initializeApp(firebaseConfig);
 
+
 Vue.config.productionTip = false
 
 new Vue({
@@ -23,3 +24,6 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+
+export const bus = new Vue()
