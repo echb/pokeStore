@@ -40,11 +40,12 @@
 </template>
 
 <script>
+import { pokeStore } from "@/store/pokemonsStore"
 import { bus } from "@/main"
 
 export default {
   data: () => ({
-    choosenPokemons: [],
+    choosenPokemons: pokeStore.pokemonsChoosen,
   }),
   methods: {
     removeAll() {
