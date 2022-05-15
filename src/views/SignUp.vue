@@ -1,23 +1,15 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="8">
-      <v-card rounded="lg" min-height="268">
+    <v-col cols="12">
+      <v-card rounded="lg" min-height="268" class="card-log">
         <form>
           <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()"
             @blur="$v.email.$touch()"></v-text-field>
           <v-text-field v-model="password" :error-messages="passwordErrors" label="password" required
             @input="$v.password.$touch()" @blur="$v.password.$touch()"></v-text-field>
 
-          <!--  -->
           <v-text-field v-model="repeatPassword" :error-messages="repeatPasswordErrors" label="repeat password" required
             @input="$v.repeatPassword.$touch()" @blur="$v.repeatPassword.$touch()"></v-text-field>
-
-          <!-- <div class="form-group" :class="{ 'form-group--error': $v.repeatPassword.$error }">
-            <label class="form__label">Repeat password</label>
-            <input class="form__input" v-model.trim="$v.repeatPassword.$model" />
-          </div>
-          <div class="error" v-if="!$v.repeatPassword.sameAsPassword">Passwords must be identical.</div> -->
-          <!--  -->
 
           <v-btn class="mr-4" @click="submit">
             submit
@@ -106,3 +98,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.card-log {
+  padding: 20px;
+}
+</style>

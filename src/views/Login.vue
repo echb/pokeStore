@@ -1,7 +1,7 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="8">
-      <v-card rounded="lg" min-height="268">
+    <v-col cols="12">
+      <v-card rounded="lg" min-height="268" class="card-log">
         <form>
           <v-text-field v-model="email" :error-messages="emailErrors" label="E-mail" required @input="$v.email.$touch()"
             @blur="$v.email.$touch()"></v-text-field>
@@ -79,3 +79,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.card-log {
+  padding: 20px;
+}
+</style>
