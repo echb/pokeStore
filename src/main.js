@@ -3,8 +3,8 @@ import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify'
 
-
 import { initializeApp } from "firebase/app";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAWffTGumCT5Q3PCWJyZEydD6RhqaUylP4",
   authDomain: "poke-api-4b9a3.firebaseapp.com",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
-
 
 Vue.config.productionTip = false
 
