@@ -5,7 +5,6 @@ const authLogged = Vue.observable({
   isLogged: false
 });
 
-Vue.prototype.$authLogged = authLogged
 
 const login = async (email, password) => {
   try {
@@ -59,5 +58,6 @@ export {
   login,
   logOut,
   authChanged,
-  getCurrentUser
+  getCurrentUser,
+  authLogged,
 }
